@@ -1,0 +1,41 @@
+<div id="youtube-auth-modal" class="fixed inset-0 z-50 hidden">
+    <div class="fixed inset-0 bg-black/50"></div>
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+        <div class="w-full max-w-md bg-white rounded-lg shadow-xl">
+            <div class="p-6">
+                <h3 class="mb-4 text-lg font-medium">YouTube Music Authentication</h3>
+                <p class="mb-4 text-sm text-gray-600">
+                    To authenticate with YouTube Music:
+                    <ol class="pl-5 mt-2 space-y-2 text-sm list-decimal">
+                        <li>Open <a href="https://music.youtube.com" target="_blank" class="text-blue-500 hover:underline">YouTube Music</a> in your browser</li>
+                        <li>Make sure you're logged in</li>
+                        <li>Press F12 to open Developer Tools</li>
+                        <li>Go to Network tab</li>
+                        <li>Click on any request to music.youtube.com</li>
+                        <li>Right-click → Copy → Copy as cURL (bash)</li>
+                        <li>Paste the entire curl command below</li>
+                    </ol>
+                </p>
+                <textarea 
+                    id="headers-input"
+                    class="w-full h-32 p-2 mb-4 font-mono text-sm border rounded-md"
+                    placeholder="curl 'https://music.youtube.com/...' -H 'header1: value1' -H 'header2: value2' ..."
+                ></textarea>
+                <div class="flex justify-end gap-2">
+                    <button 
+                        onclick="closeYouTubeAuthModal()"
+                        class="px-4 py-2 text-gray-700 transition-colors bg-gray-100 rounded-md hover:bg-gray-200"
+                    >
+                        Cancel
+                    </button>
+                    <button 
+                        onclick="authenticateYouTube()"
+                        class="px-4 py-2 text-white transition-colors bg-blue-500 rounded-md hover:bg-blue-600"
+                    >
+                        Authenticate
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

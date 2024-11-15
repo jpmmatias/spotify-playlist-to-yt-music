@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <script src="https://unpkg.com/htmx.org"></script>
+    <link href="{{ url_for('static', path='css/app.css') }}" rel="stylesheet">
+</head>
+<body>
+    {% block content %}{% endblock %}
+    {% include "partials/youtube_auth_modal.html" %}
+
+    <script>
+        let isYouTubeAuthenticated = false;
+
+        function showYouTubeAuthModal() {
+            document.getElementById('youtube-auth-modal').classList.remove('hidden');
+        }
+
+        function closeYouTubeAuthModal() {
+            document.getElementById('youtube-auth-modal').classList.add('hidden');
+        }
+
+        async function authenticateYouTube() {
+            const headers = document.getElementById('headers-input').value;
+            
+            if (!headers.toLowerCase().includes('curl')) {
+                alert('Please paste the complete curl command from YouTube Music');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/youtube/auth', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ headers_raw: headers }),
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+                
+                if (response.ok && data.status === 'success') {
+                    isYouTubeAuthenticated = true;
+                    closeYouTubeAuthModal();
+                    alert('Successfully authenticated with YouTube Music!');
+                    localStorage.setItem('youtube_authenticated', 'true');
+                } else {
+                    throw new Error(data.message || 'Authentication failed');
+                }
+            } catch (error) {
+                console.error('Authentication error:', error);
+                alert('Authentication failed: ' + error.message);
+            }
+        }
+
+        async function convertPlaylist(playlistId) {
+            try {
+                const response = await fetch(`/convert/${playlistId}`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.status === 401) {
+                    isYouTubeAuthenticated = false;
+                    localStorage.removeItem('youtube_authenticated');
+                    showYouTubeAuthModal();
+                    return;
+                }
+
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    alert('Playlist converted successfully! YouTube Music playlist ID: ' + data.youtube_playlist_id);
+                } else {
+                    throw new Error(data.message || 'Conversion failed');
+                }
+            } catch (error) {
+                console.error('Conversion error:', error);
+                alert('Conversion failed: ' + error.message);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            isYouTubeAuthenticated = localStorage.getItem('youtube_authenticated') === 'true';
+        });
+    </script>
+</body>
+</html> 

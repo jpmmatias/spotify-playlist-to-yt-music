@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Spotify Playlists{% endblock %}
+
+{% block content %}
+<main class="container p-4 mx-auto">
+    <h1 class="mb-4 text-3xl font-bold">Spotify Playlists</h1>
+    <p class="mb-2 text-lg">Welcome, {{ profile.display_name }}</p>
+    <p class="mb-6">Select a playlist to convert</p>
+    <div id="playlists">
+        <div class="flex flex-col gap-4">
+            {% for playlist in playlists %}
+                {% include "partials/spotify_playlist_item.html" %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="youtube-auth-section">
+        <h3>YouTube Music Authentication</h3>
+        <div class="instructions">
+            <p><strong>Please follow these steps exactly:</strong></p>
+            <ol>
+                <li>Go to <a href="https://music.youtube.com" target="_blank">music.youtube.com</a> and make sure you're logged in</li>
+                <li>Press F12 or right-click and select "Inspect" to open Developer Tools</li>
+                <li>Click on the "Network" tab in Developer Tools</li>
+                <li>Type "browse" in the Network filter box</li>
+                <li>Click on "Library" in YouTube Music or scroll the page</li>
+                <li>In the Network tab, find and click on a request that starts with "browse"</li>
+                <li>In the request details, scroll to find "Request Headers"</li>
+                <li>Right-click on the headers section and select "Copy" > "Copy all as cURL (bash)"</li>
+                <li>Paste the entire cURL command below:</li>
+            </ol>
+        </div>
+        <textarea id="youtube-headers" rows="10" placeholder="Paste the cURL command here..."></textarea>
+        <button onclick="authenticateYouTubeMusic()">Authenticate YouTube Music</button>
+        <div id="auth-status"></div>
+    </div>
+</main>
+{% endblock %} 

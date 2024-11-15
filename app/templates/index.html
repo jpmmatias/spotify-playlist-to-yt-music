@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Spotify To Youtube Music{% endblock %}
+
+{% block content %}
+<main class="container p-4 mx-auto">
+    <h1 class="mb-4 text-3xl font-bold">Spotify To Youtube Music</h1>
+    <p class="mb-4">A tool to convert your Spotify playlists to Youtube Music playlists</p>
+    <ul class="pl-5 mb-6 list-disc">
+        <li>Login with Spotify</li>
+        <li>Select a playlist</li>
+        <li>Convert to Youtube Music</li>
+    </ul>
+    <div id="login-button" class="flex justify-center">
+        <a href="/login" class="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700">
+            Login with Spotify
+        </a>
+    </div>
+</main>
+{% endblock %} 
