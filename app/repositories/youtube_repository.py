@@ -6,7 +6,7 @@ import re
 import os
 from fastapi import Request
 import threading
-
+:
 class YouTubeMusicRepository:
     _lock = threading.Lock()
     _instance = None
